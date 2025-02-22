@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "target": "ES5",
+    "downlevelIteration": true,
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "types": ["element-plus/global"],
+  "exclude": ["node_modules", "dist"]
+}
