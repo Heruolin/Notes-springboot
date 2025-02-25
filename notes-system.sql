@@ -11,60 +11,64 @@
  Target Server Version : 80040 (8.0.40)
  File Encoding         : 65001
 
- Date: 26/01/2025 13:40:25
+ Date: 25/02/2025 10:02:22
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
--- Table structure for file-list
+-- Table structure for archive-listgroup
 -- ----------------------------
-DROP TABLE IF EXISTS `file-list`;
-CREATE TABLE `file-list`  (
+DROP TABLE IF EXISTS `archive-listgroup`;
+CREATE TABLE `archive-listgroup`  (
+  `id` int NOT NULL,
+  `userid` int NULL DEFAULT NULL,
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `listgroup` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `order` int NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of archive-listgroup
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for archive-notes
+-- ----------------------------
+DROP TABLE IF EXISTS `archive-notes`;
+CREATE TABLE `archive-notes`  (
   `id` int NOT NULL,
   `userid` int NULL DEFAULT NULL,
   `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `text` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of file-list
--- ----------------------------
-
--- ----------------------------
--- Table structure for file-notes
--- ----------------------------
-DROP TABLE IF EXISTS `file-notes`;
-CREATE TABLE `file-notes`  (
-  `id` int NOT NULL,
-  `userid` int NOT NULL,
-  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  `text` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `tag` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `img` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `color` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `order` int NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
--- Records of file-notes
+-- Records of archive-notes
 -- ----------------------------
+INSERT INTO `archive-notes` VALUES (608223234, NULL, '速度', '11', NULL, '', '#ffffff', 2);
 
 -- ----------------------------
--- Table structure for file-remind
+-- Table structure for archive-remind
 -- ----------------------------
-DROP TABLE IF EXISTS `file-remind`;
-CREATE TABLE `file-remind`  (
+DROP TABLE IF EXISTS `archive-remind`;
+CREATE TABLE `archive-remind`  (
   `id` int NOT NULL,
   `userid` int NOT NULL,
   `text` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `time` datetime NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
--- Records of file-remind
+-- Records of archive-remind
 -- ----------------------------
 
 -- ----------------------------
@@ -73,14 +77,32 @@ CREATE TABLE `file-remind`  (
 DROP TABLE IF EXISTS `list`;
 CREATE TABLE `list`  (
   `id` int NOT NULL AUTO_INCREMENT,
+  `listid` int NULL DEFAULT NULL,
+  `text` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `complete` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of list
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for listgroup
+-- ----------------------------
+DROP TABLE IF EXISTS `listgroup`;
+CREATE TABLE `listgroup`  (
+  `id` int NOT NULL AUTO_INCREMENT,
   `userid` int NULL DEFAULT NULL,
   `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  `text` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `listgroup` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `order` int NULL DEFAULT NULL,
+  `trash_time` datetime NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of list
+-- Records of listgroup
 -- ----------------------------
 
 -- ----------------------------
@@ -94,16 +116,19 @@ CREATE TABLE `notes`  (
   `text` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `tag` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `img` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  `order` int NULL DEFAULT 0,
+  `color` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `order` int NULL DEFAULT NULL,
+  `trash_time` datetime NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1468022786 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1988128770 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of notes
 -- ----------------------------
-INSERT INTO `notes` VALUES (-1446928382, 1213, '123', '2323', NULL, 'test1.png,test2.jpg', 0);
-INSERT INTO `notes` VALUES (-868196351, 1213, '123', '份额份额', '', '', 2);
-INSERT INTO `notes` VALUES (1468022785, 1213, '12sd', 'sdsdsd', NULL, '', 1);
+INSERT INTO `notes` VALUES (-1681895423, NULL, '123', '123', '', '', '#ffffff', 1, NULL);
+INSERT INTO `notes` VALUES (1140871169, NULL, '12121', '323232323', NULL, NULL, NULL, 2, NULL);
+INSERT INTO `notes` VALUES (1262546945, NULL, NULL, 'dgsfgsf', NULL, '', '#ffffff', 3, NULL);
+INSERT INTO `notes` VALUES (1736482818, NULL, '232321', '21323\n12334\n12344\n', '998', '0a9e7ef6-5792-4e5a-85cc-ad8f18bc0e9c.png', 'rgba(248, 194, 194, 1)', 0, NULL);
 
 -- ----------------------------
 -- Table structure for remind
@@ -115,7 +140,7 @@ CREATE TABLE `remind`  (
   `text` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `time` datetime NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of remind
@@ -127,29 +152,32 @@ CREATE TABLE `remind`  (
 DROP TABLE IF EXISTS `tag`;
 CREATE TABLE `tag`  (
   `id` int NOT NULL AUTO_INCREMENT,
-  `userid` int NOT NULL,
+  `userid` int NULL DEFAULT NULL,
   `tag` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1606426626 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of tag
 -- ----------------------------
+INSERT INTO `tag` VALUES (-1178591231, NULL, '998');
 
 -- ----------------------------
--- Table structure for trash-list
+-- Table structure for trash-listgroup
 -- ----------------------------
-DROP TABLE IF EXISTS `trash-list`;
-CREATE TABLE `trash-list`  (
+DROP TABLE IF EXISTS `trash-listgroup`;
+CREATE TABLE `trash-listgroup`  (
   `id` int NOT NULL,
   `userid` int NULL DEFAULT NULL,
   `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  `text` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `listgroup` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `order` int NULL DEFAULT NULL,
+  `trash_time` datetime NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
--- Records of trash-list
+-- Records of trash-listgroup
 -- ----------------------------
 
 -- ----------------------------
@@ -158,17 +186,21 @@ CREATE TABLE `trash-list`  (
 DROP TABLE IF EXISTS `trash-notes`;
 CREATE TABLE `trash-notes`  (
   `id` int NOT NULL,
-  `userid` int NOT NULL,
+  `userid` int NULL DEFAULT NULL,
   `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `text` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `tag` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `img` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `color` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `order` int NULL DEFAULT NULL,
+  `trash_time` datetime NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of trash-notes
 -- ----------------------------
+INSERT INTO `trash-notes` VALUES (1757487106, NULL, 'qeqe', 'rwrqwr', '', '', 'rgba(137, 255, 143, 1)', 1, '2025-02-22 16:29:15');
 
 -- ----------------------------
 -- Table structure for trash-remind
@@ -180,7 +212,7 @@ CREATE TABLE `trash-remind`  (
   `text` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `time` datetime NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of trash-remind
@@ -191,27 +223,15 @@ CREATE TABLE `trash-remind`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user`  (
-  `userid` int NOT NULL COMMENT '用户id',
+  `userid` int NOT NULL AUTO_INCREMENT,
   `username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   PRIMARY KEY (`userid`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-
--- ----------------------------
--- View structure for v_score
--- ----------------------------
-DROP VIEW IF EXISTS `v_score`;
-CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `v_score` AS select `es`.`stuId` AS `stuId`,`es`.`paperId` AS `paperId`,`s`.`nickName` AS `nickName`,`p`.`name` AS `name`,sum(`es`.`correntScore`) AS `totalScore` from ((`exam_paper` `p` join `exam_scoredetail` `es` on((`p`.`id` = `es`.`paperId`))) join `t_student` `s` on((`s`.`id` = `es`.`stuId`))) group by `s`.`id`,`es`.`paperId`;
-
--- ----------------------------
--- View structure for v_stuscore
--- ----------------------------
-DROP VIEW IF EXISTS `v_stuscore`;
-CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `v_stuscore` AS select `s`.`id` AS `stuId`,`ep`.`id` AS `paperId`,`s`.`nickName` AS `nickName`,`ep`.`name` AS `name`,sum(`sd`.`correntScore`) AS `totalScore` from ((`exam_scoredetail` `sd` join `exam_paper` `ep` on((`sd`.`paperId` = `ep`.`id`))) join `t_student` `s` on((`s`.`id` = `sd`.`stuId`))) group by `sd`.`paperId`,`sd`.`stuId`;
 
 SET FOREIGN_KEY_CHECKS = 1;
