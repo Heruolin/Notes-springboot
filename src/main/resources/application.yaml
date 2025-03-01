@@ -1,0 +1,15 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: notes-springboot
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: 753951
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://localhost:3306/notes-system?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    username: root
+mapper-locations: classpath:mapper/*.xml
+mybatis-plus: ''
+upload:
+  dir: E:\作业\毕设\《基于Spring Boot+Vue3的电子便签系统的设计与实现》\notes-vue\public\assets\Notesimages\
