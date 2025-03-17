@@ -8,8 +8,12 @@ import org.springframework.stereotype.Service;
 public interface UserService {
 
 
+    // 根据用户名查询用户
+    User getUserByUsername(String username);
 
-    void insertUser(User user);
+    // 登录逻辑
+    User login(String username, String password);
 
-    User login(User user);
+    // 注册逻辑
+    boolean register(User user);
 }

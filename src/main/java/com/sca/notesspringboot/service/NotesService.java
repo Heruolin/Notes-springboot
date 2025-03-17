@@ -26,11 +26,15 @@ public interface NotesService {
     //添加图片
     void updateImage(int id, String imagePath);
 
-    //根据关键字进行查询
-    List<Notes> selectNotesByKeyword(String Keyword);
+//    //根据关键字进行查询
+//    List<Notes> selectNotesByKeyword(String Keyword);
+//
+//    //根据标签进行查询
+//    List<Notes> selectNotesByTag(String tag); // 新增方法
 
-    //根据标签进行查询
-    List<Notes> selectNotesByTag(String tag); // 新增方法
+    List<Notes> selectNotesByKeyword(String keyword);
+
+    List<Notes> selectNotesByTag(String tag);
 
     // 归档便签
     void archiveNotes(int id);
@@ -49,4 +53,14 @@ public interface NotesService {
     void restoreTrashNote(int id);
 
     void deleteTrashNote(int id);
+
+    List<Notes> selectNotesByUserId(int userid);
+
+    List<Notes> selectNotesByKeywordAndUserId(String keyword, int userid);
+
+    List<Notes> selectNotesByTagAndUserId(String tag, int userid);
+
+    List<Notes> selectArchiveNotesByUserId(int userid);
+
+    List<Notes> selectTrashNotesByUserId(int userid);
 }

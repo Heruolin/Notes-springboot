@@ -1,41 +1,60 @@
-//package com.sca.notesspringboot.config;
-//
-//
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.context.annotation.Bean;
-//import org.springframework.context.annotation.Configuration;
-//import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-//import org.springframework.security.core.userdetails.UserDetailsService;
-//import org.springframework.security.web.SecurityFilterChain;
-//
-//@Configuration
-//public class SecurityConfig {
-//
-//    @Autowired
-//    UserDetailsService userDetailsService;
-//
-//    @Autowired
-//    MyAuthenctiationSuccessHandler myAuthenctiationSuccessHandler;
-//
-//    @Bean
-//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//        http
-//                .authorizeHttpRequests(authz -> authz
-//                        .requestMatchers("/static/**"
-//                        )
-//                        .permitAll()  // 静态资源放行
-//                        .anyRequest().authenticated()              // 其他请求需要认证
-//                )
-//                .formLogin(form -> form
-//                        .loginPage("/login")                       // 指定自定义的登录页面
-//                        .loginProcessingUrl("/form")               // 指定处理登录请求的URL
-//                        .defaultSuccessUrl("/main")              // 登录成功后跳转的URL（如果需要）
-//                        .successHandler(myAuthenctiationSuccessHandler) // 登录成功处理器
-//                        .failureUrl("/fail").permitAll()           // 登录失败跳转页面
-//                )
-//                .csrf(csrf -> csrf.disable());                 // 关闭CSRF保护
-//
-//        return http.build();
-//    }
-//}
-//
+package com.sca.notesspringboot.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import java.util.List;
+
+@Configuration
+public class SecurityConfig {
+
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+
+    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+    }
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf(csrf -> csrf.disable()) // 关闭 CSRF（避免 POST 请求被拦截）
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // 允许跨域
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/user/register", "/user/login").permitAll() // 允许访问
+                        .anyRequest().authenticated() // 其他请求需要认证
+                )
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // 添加 JWT 过滤器
+
+        return http.build();
+    }
+
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        config.setAllowedOrigins(List.of("http://localhost:5173", "http://localhost:8080"));
+        config.setAllowedHeaders(List.of("*"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        source.registerCorsConfiguration("/**", config);
+        return source;
+    }
+}

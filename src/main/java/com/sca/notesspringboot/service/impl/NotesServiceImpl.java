@@ -111,7 +111,6 @@ public class NotesServiceImpl implements NotesService {
     }
 
     @Override
-    //关键字查询便签
     public List<Notes> selectNotesByKeyword(String keyword){
         // 创建 QueryWrapper 对象
         QueryWrapper<Notes> queryWrapper = new QueryWrapper<>();
@@ -128,7 +127,6 @@ public class NotesServiceImpl implements NotesService {
     }
 
     @Override
-    // 根据标签查询便签
     public List<Notes> selectNotesByTag(String tag) {
         // 创建 QueryWrapper 对象
         QueryWrapper<Notes> queryWrapper = new QueryWrapper<>();
@@ -226,6 +224,40 @@ public class NotesServiceImpl implements NotesService {
         // 从 trash-notes 表中删除
         notesMapper.deleteFromTrashNotes(id);
     }
+
+    @Override
+    public List<Notes> selectNotesByUserId(int userid) {
+        QueryWrapper<Notes> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("userid", userid);
+        List<Notes> notesList = notesMapper.selectList(queryWrapper);
+        convertTagAndImgToList(notesList);
+        return notesList;
+    }
+
+    @Override
+    public List<Notes> selectNotesByKeywordAndUserId(String keyword, int userid) {
+        return List.of();
+    }
+
+    @Override
+    public List<Notes> selectNotesByTagAndUserId(String tag, int userid) {
+        QueryWrapper<Notes> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("userid", userid).like("tag", tag);
+        List<Notes> notesList = notesMapper.selectList(queryWrapper);
+        convertTagAndImgToList(notesList);
+        return notesList;
+    }
+
+    @Override
+    public List<Notes> selectArchiveNotesByUserId(int userid) {
+        return List.of();
+    }
+
+    @Override
+    public List<Notes> selectTrashNotesByUserId(int userid) {
+        return List.of();
+    }
+
 
     // 定时任务，每天凌晨 2 点执行一次
     @Scheduled(cron = "0 0 2 * * ?")

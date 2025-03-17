@@ -8,6 +8,9 @@ public interface TagService {
     //查询Tag列表
     List<Tag> findAll();
     Tag findById(int id);
+
+    List<Tag> selectTagsByUserId(int userid);
+
     //添加Tag
     void insertTag(Tag tag);
     //更新Tag

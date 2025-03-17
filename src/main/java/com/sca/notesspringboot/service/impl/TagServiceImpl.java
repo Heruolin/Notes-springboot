@@ -1,5 +1,6 @@
 package com.sca.notesspringboot.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.sca.notesspringboot.entity.Tag;
 import com.sca.notesspringboot.mapper.TagMapper;
 import com.sca.notesspringboot.service.TagService;
@@ -22,6 +23,13 @@ public class TagServiceImpl implements TagService {
     @Override
     public Tag findById(int id) {
         return tagMapper.selectById(id);
+    }
+
+    @Override
+    public List<Tag> selectTagsByUserId(int userid) {
+        QueryWrapper<Tag> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("userid", userid);
+        return tagMapper.selectList(queryWrapper);
     }
 
     @Override

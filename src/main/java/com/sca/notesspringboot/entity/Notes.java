@@ -18,6 +18,7 @@ public class Notes {
     private String color;
     @TableField("`order`") // 指定数据库字段名
     private Integer order;
+    @TableField("trash_time")
     private LocalDateTime trashTime; // 记录便签被移到回收站的时间
     @TableField(exist = false)
     private List<String> tagList;

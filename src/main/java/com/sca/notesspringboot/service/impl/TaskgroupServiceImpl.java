@@ -5,8 +5,11 @@ import com.sca.notesspringboot.mapper.TaskgroupMapper;
 import com.sca.notesspringboot.mapper.TaskMapper; // 导入 TaskMapper
 import com.sca.notesspringboot.service.TaskgroupService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
@@ -77,7 +80,8 @@ public class TaskgroupServiceImpl implements TaskgroupService {
         Taskgroup taskgroup = taskgroupMapper.selectById(id);
         if (taskgroup != null) {
             taskgroup.setStatus("trashed");
-            taskgroupMapper.updateById(taskgroup);
+            taskgroup.setTrashTime(LocalDateTime.now()); // 设置 trash_time
+            taskgroupMapper.updateTaskgroupStatusAndTrashTime(id, "trashed", LocalDateTime.now());
         } else {
             throw new RuntimeException("任务组不存在");
         }
@@ -89,6 +93,7 @@ public class TaskgroupServiceImpl implements TaskgroupService {
         if (taskgroup != null && "trashed".equals(taskgroup.getStatus())) {
             taskgroup.setStatus("active");
             taskgroupMapper.updateById(taskgroup);
+            taskgroupMapper.resetTaskgroupTrashTime(id); // 重置 trash_time
         } else {
             throw new RuntimeException("回收站任务组不存在");
         }
@@ -96,14 +101,26 @@ public class TaskgroupServiceImpl implements TaskgroupService {
 
     @Override
     public void deleteTrashTaskgroup(int id) {
-        // 删除任务组内的所有任务
         taskMapper.deleteTasksByTaskgroupId(id);
-        // 删除任务组
         taskgroupMapper.deleteById(id);
     }
 
     @Override
     public List<Taskgroup> selectTrashTaskgroups() {
         return taskgroupMapper.selectTrashTaskgroups();
+    }
+
+    // 定时任务，每天凌晨 2 点执行一次
+    @Scheduled(cron = "0 0 2 * * ?")
+    public void deleteExpiredTrashTaskgroups() {
+        List<Taskgroup> trashTaskgroups = taskgroupMapper.selectTrashTaskgroups();
+        LocalDateTime now = LocalDateTime.now();
+        for (Taskgroup taskgroup : trashTaskgroups) {
+            LocalDateTime trashTime = taskgroup.getTrashTime(); // 获取任务组被移到回收站的时间
+            if (trashTime != null && ChronoUnit.DAYS.between(trashTime, now) >= 10) {
+                taskMapper.deleteTasksByTaskgroupId(taskgroup.getId()); // 删除任务组内的所有任务
+                taskgroupMapper.deleteById(taskgroup.getId()); // 删除超过十日的任务组
+            }
+        }
     }
 }

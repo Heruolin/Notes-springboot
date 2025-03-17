@@ -5,7 +5,6 @@ import com.sca.notesspringboot.entity.Notes;
 import com.sca.notesspringboot.service.NotesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,8 +12,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 import java.util.Collections;
-
 import java.util.List;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 
 @RestController
 @RequestMapping("Notes")
@@ -25,30 +25,51 @@ public class NotesController {
 
     // 查询所有便签
     @GetMapping("/Noteslist")
-    public Result selectNotes() {
-        List<Notes> list = notesService.selectNotes(); // 正确调用 service 方法
+    public Result selectNotes(@RequestParam int userid) {
+        List<Notes> list = notesService.selectNotesByUserId(userid); // 根据userid查询便签
+        if (list.isEmpty()) {
+            return Result.error("没有找到便签");
+        }
         return Result.success(list);
     }
 
     // 根据关键字查询便签
     @GetMapping("/NotesSearch")
-    public Result selectNotesByKeyword(@RequestParam String keyword) {
-        List<Notes> list = notesService.selectNotesByKeyword(keyword);
+    public Result selectNotesByKeyword(@RequestParam String keyword, @RequestParam int userid) {
+        List<Notes> list = notesService.selectNotesByKeywordAndUserId(keyword, userid); // 根据关键字和userid查询便签
         return Result.success(list);
     }
 
     // 根据标签查询便签
     @GetMapping("/NotesByTag")
-    public Result selectNotesByTag(@RequestParam String tag) {
-        List<Notes> list = notesService.selectNotesByTag(tag);
+    public Result selectNotesByTag(@RequestParam String tag, @RequestParam int userid) {
+        List<Notes> list = notesService.selectNotesByTagAndUserId(tag, userid); // 根据标签和userid查询便签
         return Result.success(list);
     }
 
     // 添加便签
     @PostMapping("/NotesAdd")
     public Result insertNotes(@RequestBody Notes notes) {
+        // 直接使用传递过来的 userid
         notesService.insertNotes(notes);
         return Result.success("便签添加成功");
+    }
+
+    // 解析 token 获取用户信息的示例方法
+    private int parseUserIdFromToken(String token) {
+        // 去掉 "Bearer " 前缀
+        if (token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        }
+
+        // 解析 token
+        Claims claims = Jwts.parser()
+            .setSigningKey("your_secret_key") // 替换为你的密钥
+            .parseClaimsJws(token)
+            .getBody();
+
+        // 获取 userid
+        return Integer.parseInt(claims.getSubject());
     }
 
     // 更新便签
@@ -226,15 +247,15 @@ public class NotesController {
 
     // 查询归档内所有便签
     @GetMapping("/Archive/Noteslist")
-    public Result selectArchiveNotes() {
-        List<Notes> list = notesService.selectArchiveNotes();
+    public Result selectArchiveNotes(@RequestParam int userid) {
+        List<Notes> list = notesService.selectArchiveNotesByUserId(userid); // 根据userid查询归档便签
         return Result.success(list);
     }
 
     // 查询回收站内所有便签
     @GetMapping("/Trash/Noteslist")
-    public Result selectTrashNotes() {
-        List<Notes> list = notesService.selectTrashNotes();
+    public Result selectTrashNotes(@RequestParam int userid) {
+        List<Notes> list = notesService.selectTrashNotesByUserId(userid); // 根据userid查询回收站便签
         return Result.success(list);
     }
 

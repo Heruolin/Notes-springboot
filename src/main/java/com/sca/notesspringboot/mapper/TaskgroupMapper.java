@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.sca.notesspringboot.entity.Taskgroup;
 import org.apache.ibatis.annotations.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Mapper
@@ -39,4 +40,12 @@ public interface TaskgroupMapper extends BaseMapper<Taskgroup> {
     // 更新任务组状态
     @Update("UPDATE taskgroup SET status = #{status} WHERE id = #{id}")
     void updateTaskgroupStatus(@Param("id") int id, @Param("status") String status);
+
+    // 更新任务组状态和 trash_time
+    @Update("UPDATE taskgroup SET status = #{status}, trash_time = #{trashTime} WHERE id = #{id}")
+    void updateTaskgroupStatusAndTrashTime(@Param("id") int id, @Param("status") String status, @Param("trashTime") LocalDateTime trashTime);
+
+    // 重置任务组的 trash_time
+    @Update("UPDATE taskgroup SET trash_time = NULL WHERE id = #{id}")
+    void resetTaskgroupTrashTime(@Param("id") int id);
 }
