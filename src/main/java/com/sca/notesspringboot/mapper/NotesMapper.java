@@ -32,7 +32,9 @@ public interface NotesMapper extends BaseMapper<Notes> {
     // 查询归档便签列表，按 id 降序排列
     @Select("SELECT * FROM `archive-notes` ORDER BY id DESC")
     List<Notes> selectArchiveNotes();
-
+    // 查询指定用户的归档便签列表，按 id 降序排列
+    @Select("SELECT * FROM `archive-notes` WHERE userid = #{userid} ORDER BY id DESC")
+    List<Notes> selectArchiveNotesByUserid(@Param("userid") int userid);
     // 查询归档便签
     @Select("SELECT * FROM `archive-notes` WHERE id = #{id}")
     Notes selectArchivedNoteById(@Param("id") int id);
@@ -54,6 +56,10 @@ public interface NotesMapper extends BaseMapper<Notes> {
     // 查询回收站便签列表，按 id 降序排列
     @Select("SELECT * FROM `trash-notes` ORDER BY id DESC")
     List<Notes> selectTrashNotes();
+
+    // 查询指定用户的回收站便签列表，按 id 降序排列
+    @Select("SELECT * FROM `trash-notes` WHERE userid = #{userid} ORDER BY id DESC")
+    List<Notes> selectTrashNotesByUserid(@Param("userid") int userid);
 
     // 查询回收站便签
     @Select("SELECT * FROM `trash-notes` WHERE id = #{id}")

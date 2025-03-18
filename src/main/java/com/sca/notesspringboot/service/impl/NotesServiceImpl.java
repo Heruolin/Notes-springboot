@@ -250,12 +250,18 @@ public class NotesServiceImpl implements NotesService {
 
     @Override
     public List<Notes> selectArchiveNotesByUserId(int userid) {
-        return List.of();
+        List<Notes> notesList = notesMapper.selectArchiveNotesByUserid(userid); // 查询指定用户的归档便签
+        convertTagAndImgToList(notesList); // 转换 tag 和 img 为数组
+        return notesList;
     }
 
     @Override
     public List<Notes> selectTrashNotesByUserId(int userid) {
-        return List.of();
+        QueryWrapper<Notes> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("userid", userid); // 根据 userid 查询
+        List<Notes> notesList = notesMapper.selectTrashNotesByUserid(userid); // 调用 Mapper 方法
+        convertTagAndImgToList(notesList); // 转换 tag 和 img 为数组
+        return notesList;
     }
 
 

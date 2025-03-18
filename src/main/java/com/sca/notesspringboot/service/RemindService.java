@@ -17,4 +17,10 @@ public interface RemindService {
     void archiveRemind(int id);
     void restoreArchivedRemind(int id);
     List<Remind> selectArchiveReminds();
+
+    List<Remind> selectRemindByUserId(int userid);
+
+    List<Remind> selectTrashRemindsByUserId(int userid);
+
+    List<Remind> selectArchiveRemindsByUserId(int userid);
 }

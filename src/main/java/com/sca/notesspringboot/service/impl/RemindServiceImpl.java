@@ -48,9 +48,8 @@ public class RemindServiceImpl implements RemindService {
     public void trashRemind(int id) {
         Remind remind = remindMapper.selectById(id);
         if (remind != null) {
-            remind.setStatus("trashed");
-            remind.setTrashTime(LocalDateTime.now()); // 设置 trash_time
-            remindMapper.updateRemindStatusAndTrashTime(id, "trashed", LocalDateTime.now());
+            remindMapper.insertToTrashRemind(id); // 复制数据到 trash-remind 表
+            remindMapper.deleteFromRemind(id);   // 从 remind 表删除
         } else {
             throw new RuntimeException("提醒不存在");
         }
@@ -65,12 +64,11 @@ public class RemindServiceImpl implements RemindService {
     public void restoreTrashRemind(int id) {
         Remind remind = remindMapper.selectTrashRemindById(id);
         if (remind != null) {
-            remind.setStatus("active");
-            remindMapper.updateById(remind);
-            remindMapper.resetRemindTrashTime(id); // 重置 trash_time
+            remindMapper.insertToRemindFromTrash(id); // 将数据插入 remind 表
+            remindMapper.deleteFromTrashRemind(id);   // 从 trash-remind 表删除
         } else {
-            throw new RuntimeException("回收站提醒不存在");
-        }
+        throw new RuntimeException("回收站提醒不存在");
+    }
     }
 
     @Override
@@ -100,9 +98,25 @@ public class RemindServiceImpl implements RemindService {
         }
     }
 
+
     @Override
     public List<Remind> selectArchiveReminds() {
         return remindMapper.selectArchiveReminds();
+    }
+
+    @Override
+    public List<Remind> selectRemindByUserId(int userid) {
+        return remindMapper.selectRemindByUserId(userid);
+    }
+
+    @Override
+    public List<Remind> selectTrashRemindsByUserId(int userid) {
+        return remindMapper.selectTrashRemindsByUserId(userid);
+    }
+
+    @Override
+    public List<Remind> selectArchiveRemindsByUserId(int userid) {
+        return remindMapper.selectArchiveRemindsByUserId(userid);
     }
 
     // 定时任务，每天凌晨 2 点执行一次

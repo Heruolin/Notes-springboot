@@ -15,10 +15,10 @@ public class RemindController {
     @Autowired
     RemindService remindService;
 
-    // 查询所有提醒
+    // 查询所有提醒（按用户ID）
     @GetMapping("/Remindlist")
-    public Result selectRemind() {
-        List<Remind> list = remindService.selectRemind();
+    public Result selectRemind(@RequestParam int userid) {
+        List<Remind> list = remindService.selectRemindByUserId(userid);
         return Result.success(list);
     }
 
@@ -86,10 +86,10 @@ public class RemindController {
         }
     }
 
-    // 查询回收站内所有提醒
+    // 查询回收站内所有提醒（按用户ID）
     @GetMapping("/Trash/Remindlist")
-    public Result selectTrashReminds() {
-        List<Remind> list = remindService.selectTrashReminds();
+    public Result selectTrashReminds(@RequestParam int userid) {
+        List<Remind> list = remindService.selectTrashRemindsByUserId(userid);
         return Result.success(list);
     }
 
@@ -117,10 +117,10 @@ public class RemindController {
         }
     }
 
-    // 查询归档内所有提醒
+    // 查询归档内所有提醒（按用户ID）
     @GetMapping("/Archive/Remindlist")
-    public Result selectArchiveReminds() {
-        List<Remind> list = remindService.selectArchiveReminds();
+    public Result selectArchiveReminds(@RequestParam int userid) {
+        List<Remind> list = remindService.selectArchiveRemindsByUserId(userid);
         return Result.success(list);
     }
 }

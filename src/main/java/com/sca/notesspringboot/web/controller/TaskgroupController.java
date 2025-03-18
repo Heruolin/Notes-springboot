@@ -17,8 +17,8 @@ public class TaskgroupController {
 
     // 查询所有任务组
     @GetMapping("/Taskgrouplist")
-    public Result selectTaskgroup() {
-        List<Taskgroup> list = taskgroupService.selectTaskgroup();
+    public Result selectTaskgroup(@RequestParam int userid) {
+        List<Taskgroup> list = taskgroupService.selectTaskgroupsByUserId(userid);
         return Result.success(list);
     }
 

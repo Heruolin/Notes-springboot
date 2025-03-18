@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.UUID;
 import java.util.Collections;
 import java.util.List;
@@ -28,7 +29,7 @@ public class NotesController {
     public Result selectNotes(@RequestParam int userid) {
         List<Notes> list = notesService.selectNotesByUserId(userid); // 根据userid查询便签
         if (list.isEmpty()) {
-            return Result.error("没有找到便签");
+            return Result.success(list != null && !list.isEmpty() ? list : new ArrayList<>());
         }
         return Result.success(list);
     }

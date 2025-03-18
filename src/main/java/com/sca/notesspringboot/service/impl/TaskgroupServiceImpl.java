@@ -7,6 +7,7 @@ import com.sca.notesspringboot.service.TaskgroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -108,6 +109,13 @@ public class TaskgroupServiceImpl implements TaskgroupService {
     @Override
     public List<Taskgroup> selectTrashTaskgroups() {
         return taskgroupMapper.selectTrashTaskgroups();
+    }
+
+    @Override
+    public List<Taskgroup> selectTaskgroupsByUserId(int userid) {
+        QueryWrapper<Taskgroup> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("userid", userid).orderByAsc("`order`"); // 根据用户ID查询并按顺序排序
+        return taskgroupMapper.selectList(queryWrapper);
     }
 
     // 定时任务，每天凌晨 2 点执行一次

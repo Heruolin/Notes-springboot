@@ -32,4 +32,6 @@ public interface TaskgroupService {
     void deleteTrashTaskgroup(int id);
 
     List<Taskgroup> selectTrashTaskgroups();
+
+    List<Taskgroup> selectTaskgroupsByUserId(int userid);
 }
