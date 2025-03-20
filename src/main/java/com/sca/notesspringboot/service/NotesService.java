@@ -63,4 +63,6 @@ public interface NotesService {
     List<Notes> selectArchiveNotesByUserId(int userid);
 
     List<Notes> selectTrashNotesByUserId(int userid);
+
+    void updateLock(int id, String lock);
 }

@@ -48,4 +48,8 @@ public interface TaskgroupMapper extends BaseMapper<Taskgroup> {
     // 重置任务组的 trash_time
     @Update("UPDATE taskgroup SET trash_time = NULL WHERE id = #{id}")
     void resetTaskgroupTrashTime(@Param("id") int id);
+
+    // 更新任务组锁定状态
+    @Update("UPDATE taskgroup SET lock = #{lock} WHERE id = #{id}")
+    void updateTaskgroupLock(@Param("id") int id, @Param("lock") String lock);
 }

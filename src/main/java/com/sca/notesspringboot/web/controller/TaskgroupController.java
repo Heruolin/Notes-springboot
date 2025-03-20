@@ -43,6 +43,17 @@ public class TaskgroupController {
         return Result.success("任务组顺序更新成功");
     }
 
+    // 更新任务组锁定状态
+    @PutMapping("/UpdateLock")
+    public Result updateTaskgroupLock(@RequestBody Taskgroup taskgroup) {
+        try {
+            taskgroupService.updateTaskgroupLock(taskgroup.getId(), taskgroup.getLock());
+            return Result.success("任务组锁定状态更新成功");
+        } catch (Exception e) {
+            return Result.error("任务组锁定状态更新失败: " + e.getMessage());
+        }
+    }
+
     // 删除任务组
     @DeleteMapping("/TaskgroupDelete")
     public Result deleteTaskgroup(@RequestParam int id) {

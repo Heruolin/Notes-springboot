@@ -119,6 +119,17 @@ public class RemindServiceImpl implements RemindService {
         return remindMapper.selectArchiveRemindsByUserId(userid);
     }
 
+    @Override
+    public void updateRemindLock(int id, String lock) {
+        Remind remind = remindMapper.selectById(id);
+        if (remind != null) {
+            remind.setLock(lock);
+            remindMapper.updateById(remind);
+        } else {
+            throw new RuntimeException("提醒不存在");
+        }
+    }
+
     // 定时任务，每天凌晨 2 点执行一次
     @Scheduled(cron = "0 0 2 * * ?")
     public void deleteExpiredTrashReminds() {

@@ -80,4 +80,8 @@ public interface RemindMapper extends BaseMapper<Remind> {
     // 查询归档提醒列表，按 userid 和 id 降序排列
     @Select("SELECT * FROM `archive-remind` WHERE userid = #{userid} ORDER BY id DESC")
     List<Remind> selectArchiveRemindsByUserId(@Param("userid") int userid);
+
+    // 更新任务组锁定状态
+    @Update("UPDATE remind SET lock = #{lock} WHERE id = #{id}")
+    void updateRemindLock(@Param("id") int id, @Param("lock") String lock);
 }

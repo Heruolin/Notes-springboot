@@ -273,5 +273,16 @@ public class NotesController {
         }
     }
 
+    @PutMapping("/UpdateLock")
+    public Result updateLock(@RequestBody Notes notes) {
+        try {
+            notesService.updateLock(notes.getId(), notes.getLock());
+            return Result.success("便签锁定状态更新成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.error("便签锁定状态更新失败: " + e.getMessage());
+        }
+    }
+
 }
 

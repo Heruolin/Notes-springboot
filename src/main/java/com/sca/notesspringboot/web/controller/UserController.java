@@ -70,8 +70,67 @@ public class UserController {
         }
         return response;
     }
+    //修改密码
+    @PostMapping("/changePassword")
+    public Result changePassword(@RequestBody Map<String, String> requestBody) {
+        String username = requestBody.get("username");
+        String oldPassword = requestBody.get("oldPassword");
+        String newPassword = requestBody.get("newPassword");
+
+        if (username == null || username.isEmpty()) {
+            return Result.error("用户名不能为空");
+        }
+        User user = userService.getUserByUsername(username);
+        if (user == null) {
+            return Result.error("用户不存在");
+        }
+        if (!bCryptPasswordEncoder.matches(oldPassword, user.getPassword())) {
+            return Result.error("旧密码错误");
+        }
+        user.setPassword(bCryptPasswordEncoder.encode(newPassword));
+        userService.updateUser(user);
+        return Result.success("密码修改成功");
+    }
+    //注销账户
+    @PostMapping("/logout")
+    public Result logout(@RequestHeader(value = "Authorization", required = false) String authHeader) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return Result.error("无效的Token");
+        }
+        // 这里可以添加Token黑名单逻辑以确保Token失效
+        return Result.success("注销成功");
+    }
+
+    @PostMapping("/deregister")
+    public Result deregister(@RequestBody Map<String, String> requestBody, @RequestHeader(value = "Authorization", required = false) String authHeader) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return Result.error("无效的Token");
+        }
+
+        try {
+            // 从请求体中获取 userid
+            String userIdStr = requestBody.get("userid");
+            if (userIdStr == null || userIdStr.isEmpty()) {
+                return Result.error("用户ID不能为空");
+            }
+            Integer userid = Integer.parseInt(userIdStr);
+
+            // 根据 userid 删除用户
+            User user = userService.selectByUserId(userid);
+            if (user == null) {
+                return Result.error("用户不存在");
+            }
+
+            userService.deleteUserByUserId(userid);
+            return Result.success("账户已成功注销");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.error("注销失败: " + e.getMessage());
+        }
+    }
 
 }
+
 
 
 

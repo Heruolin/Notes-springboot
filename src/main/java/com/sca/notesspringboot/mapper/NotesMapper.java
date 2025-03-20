@@ -20,6 +20,9 @@ public interface NotesMapper extends BaseMapper<Notes> {
     @Update("UPDATE notes SET img = #{img} WHERE id = #{id}")
     void updateImage(@Param("id") int id, @Param("img") String img);
 
+    @Update("UPDATE notes SET `lock` = #{lock} WHERE id = #{id}")
+    void updateLock(@Param("id") int id, @Param("lock") String lock);
+
     // 插入到 archive-notes 表
     @Insert("INSERT INTO `archive-notes` (id, userid, title, text, img, color, `order`) " +
             "SELECT id, userid, title, text, img, color, `order` FROM notes WHERE id = #{id}")
@@ -73,6 +76,9 @@ public interface NotesMapper extends BaseMapper<Notes> {
     // 从 trash-notes 表中删除
     @Delete("DELETE FROM `trash-notes` WHERE id = #{id}")
     void deleteFromTrashNotes(@Param("id") int id);
+
+    @Select("SELECT id, userid, title, text, tag, img, color,`lock`, `order`, trash_time FROM notes WHERE userid = #{userid}")
+    List<Notes> selectNotesByUserId(@Param("userid") int userid);
 }
 
 

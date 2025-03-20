@@ -65,5 +65,24 @@ public class UserServiceImpl implements UserService {
 
         return userMapper.insert(user) > 0;
     }
+
+    @Override
+    public void updateUser(User user) {
+        if (user.getUserid() == null || user.getPassword() == null) {
+            throw new IllegalArgumentException("用户 ID 和密码不能为空");
+        }
+        userMapper.updateByUserId(user.getUserid(), user.getPassword());
+    }
+
+    @Override
+    public void deleteUserByUserId(Integer userid) {
+        userMapper.deleteUserByUserId(userid);
+    }
+
+    @Override
+    public User selectByUserId(Integer userid) {
+        return userMapper.selectByUserId(userid);
+    }
+    
 }
 

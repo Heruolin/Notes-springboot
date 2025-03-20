@@ -43,6 +43,17 @@ public class RemindController {
         return Result.success("提醒顺序更新成功");
     }
 
+    // 更新提醒锁定状态
+    @PutMapping("/UpdateLock")
+    public Result updateRemindLock(@RequestBody Remind remind) {
+        try {
+            remindService.updateRemindLock(remind.getId(), remind.getLock());
+            return Result.success("提醒锁定状态更新成功");
+        } catch (Exception e) {
+            return Result.error("提醒锁定状态更新失败: " + e.getMessage());
+        }
+    }
+
     // 删除提醒
     @DeleteMapping("/RemindDelete")
     public Result deleteRemind(@RequestParam int id) {

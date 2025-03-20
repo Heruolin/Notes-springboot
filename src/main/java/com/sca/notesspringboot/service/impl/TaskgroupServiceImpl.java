@@ -118,6 +118,17 @@ public class TaskgroupServiceImpl implements TaskgroupService {
         return taskgroupMapper.selectList(queryWrapper);
     }
 
+    @Override
+    public void updateTaskgroupLock(int id, String lock) {
+        Taskgroup taskgroup = taskgroupMapper.selectById(id);
+        if (taskgroup != null) {
+            taskgroup.setLock(lock);
+            taskgroupMapper.updateById(taskgroup);
+        } else {
+            throw new RuntimeException("任务组不存在");
+        }
+    }
+
     // 定时任务，每天凌晨 2 点执行一次
     @Scheduled(cron = "0 0 2 * * ?")
     public void deleteExpiredTrashTaskgroups() {

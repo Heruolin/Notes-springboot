@@ -15,6 +15,8 @@ public class Remind {
     private String text;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime remindTime;
+    @TableField("`lock`")
+    private String lock;
     @TableField("`order`") // 指定数据库字段名
     private Integer order;
     @TableField("trash_time")

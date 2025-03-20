@@ -34,4 +34,6 @@ public interface TaskgroupService {
     List<Taskgroup> selectTrashTaskgroups();
 
     List<Taskgroup> selectTaskgroupsByUserId(int userid);
+
+    void updateTaskgroupLock(int id, String lock);
 }

@@ -23,4 +23,6 @@ public interface RemindService {
     List<Remind> selectTrashRemindsByUserId(int userid);
 
     List<Remind> selectArchiveRemindsByUserId(int userid);
+
+    void updateRemindLock(int id, String lock);
 }

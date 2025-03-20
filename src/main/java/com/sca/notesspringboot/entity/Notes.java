@@ -16,6 +16,8 @@ public class Notes {
     private String tag;
     private String img;
     private String color;
+    @TableField("`lock`")
+    private String lock;
     @TableField("`order`") // 指定数据库字段名
     private Integer order;
     @TableField("trash_time")
@@ -24,4 +26,5 @@ public class Notes {
     private List<String> tagList;
     @TableField(exist = false)
     private List<String> imgList;
+
 }

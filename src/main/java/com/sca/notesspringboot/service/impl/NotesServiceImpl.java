@@ -264,6 +264,16 @@ public class NotesServiceImpl implements NotesService {
         return notesList;
     }
 
+    @Override
+    public void updateLock(int id, String lock) {
+        Notes note = notesMapper.selectById(id);
+        if (note != null) {
+            note.setLock(lock);
+            notesMapper.updateLock(id, lock);
+        } else {
+            throw new RuntimeException("便签不存在");
+        }
+    }
 
     // 定时任务，每天凌晨 2 点执行一次
     @Scheduled(cron = "0 0 2 * * ?")

@@ -13,6 +13,8 @@ public class Taskgroup {
     private Integer id;
     private Integer userid;
     private String title;
+    @TableField("`lock`")
+    private String lock; 
     @TableField("`order`") // 指定数据库字段名
     private Integer order;
     private String status;
